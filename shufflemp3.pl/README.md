@@ -1,4 +1,4 @@
-## shufflemp3.pl - A shuffle-player for mp3-files (for Linux-terminals)
+### shufflemp3.pl - A shuffle-player for mp3-files (for Linux-terminals)
 
        shufflemp3.pl shuffles mp3-files found in and below the current working
        directory.
@@ -31,7 +31,7 @@
            h           Show help.
            q           Quit.
 
-### CAVEATS
+#### CAVEATS
        Unusual exits of the script may corrupt your current terminal-settings;
        just cancel your terminal with "ALT+F4" then and start a new one.
 
@@ -41,7 +41,7 @@
        mp3-files but end with something like ".mp3" (see above) inside or
        below your current working directory.
 
-### PREREQUISITES
+#### PREREQUISITES
        This script requires the following modules:
 
        "Audio::Play::MPG123"
@@ -58,7 +58,7 @@
 
        Also needed is the console-mp3-player "mpg321".
 
-### COPYRIGHT AND LICENSE
+#### COPYRIGHT AND LICENSE
        shufflemp3.pl is Copyright (C) 2009-2012, hlubenow.
 
        This program is free software; you can redistribute it and/or modify it
