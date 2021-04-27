@@ -34,7 +34,7 @@ sub play {
     system("$_[0] \"$_[1]\"");
 }
 
-if (! @ARGV) {
+if ($#ARGV < 0) {
     print "\nNope.\n\n";
     exit 1;
 }
