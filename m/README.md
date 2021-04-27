@@ -1,5 +1,5 @@
 
-m - Play multimedia-file(s)
+### m - Play multimedia-file(s)
 
 "m" is a little (Perl-)script I use
 to play media files of different types on the Linux console.
