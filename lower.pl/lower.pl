@@ -71,7 +71,7 @@ sub deletePoints {
     my @b = split(/\./, $a);
     my $suf;
     my $c;
-    if ($#b > 0) {
+    if ($#b > 1) {
         $suf = pop(@b);
         $c = join("", @b);
         $c .= ".";
