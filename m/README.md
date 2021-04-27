@@ -1,7 +1,7 @@
 
 ### m - Play multimedia-file(s)
 
-"m" is a little (Perl-)script I use
+"m" is a little (Perl-)script I use,
 to play media files of different types on the Linux console.
 
 When I want to play a video clip, I don't want to mess with cryptic commands
