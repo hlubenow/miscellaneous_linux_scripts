@@ -3,7 +3,9 @@
 This script lets you select an internet radio station to play.
 When you start the script without options, a list is presented, from which you can
 select a number.
-When you already know the number of the radio station in the list, you can also pass the number directly as a command line option to the script. The list just contains two example radio stations. The idea is, that you add more stations to your taste into the array at the beginning of the script. The format is relatively easy to understand.
+When you already know the number of the radio station in the list, you can also pass the number directly as a command line option to the script.
+
+Right now, the list just contains two example radio stations. The idea is, that you add more stations to your taste into the array at the beginning of the script. The format is relatively easy to understand.
 Just add lines in this format:
 
 `["Radio Station Name", "Playlist URL"],`
