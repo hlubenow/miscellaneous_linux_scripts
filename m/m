@@ -1,0 +1,104 @@
+#!/usr/bin/perl
+
+=begin comment
+
+    m - Play multimedia-file(s)
+
+    Copyright (C) 2021 hlubenow
+
+    This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+=end comment
+
+=cut
+
+use warnings;
+use strict;
+use Cwd;
+
+my $dir = getcwd();
+
+sub play {
+    print "Playing '$_[1]'.\n";
+    system("$_[0] \"$_[1]\"");
+}
+
+if (! @ARGV) {
+    print "\nNope.\n\n";
+    exit 1;
+}
+
+my $mpl   = "mplayer -af volnorm -really-quiet";
+my $mplfs = "mplayer -fs -af volnorm -really-quiet";
+my $m321  = "mpg123 -q";
+my $xmp   = "xmp";
+
+my %sufs = ("flv"      => $mplfs,
+            "flv.part" => $mplfs,
+            "webm"     => $mplfs,
+            "mp3"      => $m321,
+            "mod"      => $xmp,
+            "s3m"      => $xmp,
+            "it"       => $xmp,
+            "ogg"      => "ogg123");
+
+
+my %checks = ("WAVE"    => "aplay -q",
+              "MP3"     => $m321, 
+              "layer"   => $m321,
+              "AVI"     => $mplfs,
+              "Matroska"              => $mplfs,
+              "Microsoft ASF"         => $mplfs,
+              "Apple QuickTime movie" => $mplfs,
+              "tracker" => "xmp",
+              "SID"     => "sidplayfp",
+              "MIDI"    => "timidity 1>/dev/null");
+
+foreach my $i (@ARGV) {
+    if (! -f $i) {
+        print "'$i' not suitable (not existent or directory).\n";
+        next;
+    }
+    my $nextfile = 0;
+    foreach my $u (keys(%sufs)) {
+        if ($i =~ /\Q$u\E$/) {
+            if ($sufs{$u} eq $xmp) {
+                print "\nPlayer is $xmp.\n\n";
+            }
+            &play($sufs{$u}, $i);
+            $nextfile = 1;
+            last;
+        }
+    }
+    if ($nextfile) { next; }
+    my $fstr = `file "$i"`;
+    foreach my $u (keys(%checks)) {
+        if ($fstr =~ /\Q$u\E/) {
+            &play($checks{$u}, $i);
+            $nextfile = 1;
+            last;
+        }
+    }
+    if ($nextfile) { next; }
+    # Special cases:
+    if($fstr =~ /MPEG/) {
+        &play($mplfs, $i);
+        next;
+    }
+    if($fstr =~ /data/ && $i =~ /sid$/) {
+        &play("sidplay2", $i);
+        next;
+    }
+    print "Format of '$i' not recognized.\n";
+}
