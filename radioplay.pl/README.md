@@ -12,7 +12,7 @@ Just add lines in this format:
 
 Don't forget the comma at the end of the line.
 
-To get the m3u file and read out the mp3-lines contained within, the script uses the Perl-module "[LWP::Simple](
+To fetch the m3u file from the web and read out the mp3-lines contained within, the script uses the Perl-module "[LWP::Simple](
 https://metacpan.org/pod/LWP::Simple)". It's probably part of your Linux distribution, so look for it in the distribution's package manager.
 
 License: GNU GPL 3 (or higher)
