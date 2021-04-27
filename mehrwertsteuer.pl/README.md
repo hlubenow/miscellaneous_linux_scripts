@@ -10,4 +10,4 @@ der angegebene Betrag der Brutto-Betrag wäre.
 
 Lizenz: GNU GPL3
 
-Keine Haftung für Richtigkeit der Berechnung
+Keine Haftung für die Richtigkeit der Berechnungen
