@@ -8,6 +8,6 @@ Man gibt dem Skript also auf der Linux-Konsole einen Betrag mit, z.B.
 auf diesen Betrag zu entrichten wäre, und wie hoch ein Netto-Betrag wäre, wenn
 der angegebene Betrag der Brutto-Betrag wäre.
 
-Lizenz: GNU GPL3
+Lizenz: GNU GPL 3 (or above)
 
 Keine Haftung für die Richtigkeit der Berechnungen
