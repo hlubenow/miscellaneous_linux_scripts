@@ -1,9 +1,9 @@
-dreisatz.pl 1.0
+#### dreisatz.pl 1.0
 
 Simple script to calculate "rule of three" ("Dreisatz" in German).
 
-a  |  b
-c  |  d
+    a  |  b
+    c  |  d
 
 When you have three numbers a, b and c, where "a" corresponds proportionally to "b", and  
 "c" corresponds proportionally to "d", how large is "d" then?
