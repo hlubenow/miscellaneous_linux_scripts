@@ -1,6 +1,6 @@
 #### lower.pl
 
-This script renames a file, lowering its filenames and stripping problematic characters from it.
+This script renames a given file, by lowering its filenames and stripping problematic characters from it.
 
 So for example, it renames "Hallo Welt!.txt" to "hallo_welt.txt".
 
