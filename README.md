@@ -1,6 +1,6 @@
 # miscellaneous_linux_scripts
 
-Here are a bunch of smaller scripts, typically used on the Linux console.
+Here is a bunch of smaller scripts, typically used on the Linux console.
 
 - shufflemp3.pl: Shuffles the mp3s in and below a directory and plays them with "mpg123" (or "mpg321").
 - m: "m" is a little script I use, to quickly play media files of various types in a directory, without having to figure out which player to use for each file.
