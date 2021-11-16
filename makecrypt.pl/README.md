@@ -13,7 +13,7 @@ A result of the script should be:
 - a directory, that can be mounted and umounted, in which the contents of the container file can be accessed,
 - the bash-scripts `mosa_new` and `umosa_new` in the script's directory.
 
-`mosa` is short for `mount safe`, `umosa` for `umount safe` respectively.
+`mosa` is short for `mount safe`, `umosa` for `umount safe` respectively (These are just two abbreviations, I made up).
 The scripts contain the shell commands, that are needed to mount, respectively umount the data safe (including the safe directory).
 When executing `mosa_new`, you are asked for the safe's password on the command-line. This password was determined during safe creation by the script `makecrypt.pl`.
 
