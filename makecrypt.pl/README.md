@@ -5,7 +5,7 @@ I'm still happy with my 32bit PC, that is considered old by now, which uses Open
 On this machine, I can setup such a container by going through a process which I have described [here](https://hlubenow.lima-city.de/suse131.html#30).
 
 To automate this process, I created this Perl script `makecrypt.pl`.
-It works on my (old) machine, but I can't guarantee, it also works on newer systems. It could be, that the required shell commands and options have changed in the meantime. Then the script won't work properly. As said, I have only tested it with OpenSuSE 13.1.
+It works on my (old) machine, but I can't guarantee, it also works on newer systems. It could be, that the required shell commands and options have changed in the meantime (`makecrypt.pl` uses system-calls to the commands described in [my article](https://hlubenow.lima-city.de/suse131.html#30)). Then the script won't work properly. As said, I have only tested it with OpenSuSE 13.1.
 
 A result of the script should be:
 
@@ -47,4 +47,4 @@ When the script is finished, the safe's directory should be accessible, and ther
 
 So, the script `makecrypt.pl` is only run once to create the data safe. To open and close the safe afterwards, the scripts `mosa_new` and `umosa_new` are used. 
 
-License of "makecrypt.pl" : GNU GPL, version 3 (or above). 
+License of `makecrypt.pl` : GNU GPL, version 3 (or above). 
