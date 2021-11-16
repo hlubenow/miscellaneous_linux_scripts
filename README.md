@@ -8,6 +8,6 @@ Here is a bunch of smaller scripts, typically used on the Linux console.
 - lower.pl: Renames a file, lowering its filename and stripping problematic characters from it.
 - mehrwertsteuer.pl: A little script to calculate the German "Mehrwertsteuer".
 - dreisatz.pl: A simple script to calculate "rule of three" ("Dreisatz" in German).
-- makecrypt.pl: Creates an encrypted data container on OpenSuSE 13.1.
+- makecrypt.pl: May Create an Encrypted Data Container on OpenSuSE Linux 13.1
 
 License: GNU GPL 3 (or above) (except "shufflemp3.pl", which has the same license as Perl itself, which should be compatible with the GNU GPL too though).
