@@ -180,9 +180,9 @@ print "\nDone.\n\n";
 
 # SuSE 8.1:
 # modprobe loop_fish2
-# dd if=/dev/urandom of=/home/def/cryptfile bs=1024 count=120000
+# dd if=/dev/urandom of=/home/user/cryptfile bs=1024 count=120000
 # mkdir /home/user/safe 
-# losetup -e twofish /dev/loop0 /home/def/cryptfile
+# losetup -e twofish /dev/loop0 /home/user/cryptfile
 # mke2fs /dev/loop0
 # mount -t ext2 /dev/loop0 /home/user/safe 
 # cat /home/user/system/sffile1 >> /etc/init.d/boot.local
