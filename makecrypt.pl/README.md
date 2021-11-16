@@ -13,11 +13,11 @@ A result of the script should be:
 - a directory, that can be mounted and umounted, in which the contents of the container file can be accessed,
 - the bash-scripts "mosa_new" and "umosa_new" in the script's directory.
 
-"mosa" is short for "mount safe", "umosa" for "umount safe" respectively.
+`mosa` is short for `mount safe`, `umosa` for `umount safe` respectively.
 The scripts contain the shell commands, that are needed to mount, respectively umount the data safe (including the safe directory).
-When executing "mosa_new", you are asked for the safe's password on the command-line. This password was determined during safe creation by the script "makecrypt.pl".
+When executing `mosa_new`, you are asked for the safe's password on the command-line. This password was determined during safe creation by the script "makecrypt.pl".
 
-So the script "makecrypt.pl" needs some information:
+So the script `makecrypt.pl` needs some information:
 
 - What will the filename of the container file be?
 - In which directory will the container file be mounted?
@@ -43,8 +43,8 @@ my $UMOSAFILENAME      = "umosa_new";
 
 Writing a container file of 1 GB or more may take a while. So you sometimes have to be patient.
 
-When the script is finished, the safe's directory should be accessible, and there should be (only) a subdirectory called "lost+found" inside it. So right after creation the safe is open. You then can write other content into the directory. When you're done, leave the directory and run "umosa_new" to close it (closing the directory won't work, while you're still in it). After the directory was closed, the container file still holds the contents, but they cannot be accessed until the directory is mounted again by running "mosa_new". But to successfully run "mosa_new", the safe's password is required. That's how using the safe works.
+When the script is finished, the safe's directory should be accessible, and there should be (only) a subdirectory called `lost+found` inside it. So right after creation the safe is open. You then can write other content into the directory. When you're done, leave the directory and run `umosa_new` to close it (closing the directory won't work, while you're still in it). After the directory was closed, the container file still holds the contents, but they cannot be accessed until the directory is mounted again by running `mosa_new`. But to successfully run `mosa_new`, the safe's password is required. That's how using the safe works.
 
-So, the script "makecrypt.pl" is only run once to create the data safe. To open and close the safe afterwards, the scripts "mosa_new" and "umosa_new" are used. 
+So, the script `makecrypt.pl` is only run once to create the data safe. To open and close the safe afterwards, the scripts `mosa_new` and `umosa_new` are used. 
 
 License of "makecrypt.pl" : GNU GPL, version 3 (or above). 
