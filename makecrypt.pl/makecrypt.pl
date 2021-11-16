@@ -192,10 +192,10 @@ print "\nDone.\n\n";
 # cat /home/user/system/sffile2 >> /etc/fstab
 # echo
 # echo "Added the following line to /etc/fstab:" 
-# echo "/home/def/cryptfile /home/user/safe ext2 loop,encryption=twofish,noauto,user 0 0"
+# echo "/home/user/cryptfile /home/user/safe ext2 loop,encryption=twofish,noauto,user 0 0"
 # echo
-# chown def.users /home/def/cryptfile
-# chown -R def.users /home/user/safe 
+# chown user.users /home/user/cryptfile
+# chown -R user.users /home/user/safe 
 # echo "Ready."
 
 # Mandrake Linux:
