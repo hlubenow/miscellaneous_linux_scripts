@@ -1,4 +1,4 @@
-#### makecrypt.pl 1.0 - May create an Encrypted Data Container on OpenSuSE Linux 13.1
+#### makecrypt.pl 1.0 - May Create an Encrypted Data Container on OpenSuSE Linux 13.1
 
 On many Linux systems, it is possible to create a "data safe", that is a password secured, encrypted container file for sensible data.
 I'm still happy with my 32bit PC, that is considered old by now, which uses OpenSuSE 13.1.
