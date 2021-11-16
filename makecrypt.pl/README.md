@@ -20,11 +20,11 @@ When executing `mosa_new`, you are asked for the safe's password on the command-
 So the script `makecrypt.pl` needs some information:
 
 - What will the filename of the container file be?
-- In which directory will the container file be mounted?
+- Which directory will show the contents of the container file when mounted?
 - What size will the container file have? 
-- "MB" (Megabytes) or "GB" (Gigabytes)?
+- "MB" (megabytes) or "GB" (gigabytes)?
 - What is the password to be used to access the safe?
-- What shall the files for the "mosa" and "umosa" scripts be called?
+- What shall the files for the `mosa` and `umosa` scripts be called?
 
 This information is given to the script by editing the variable section at its beginning. If you execute the script without having edited it before, it will exit with an error. 
 The variable section of the script looks like this (it shouldn't be too difficult to edit the variables according to your needs):
