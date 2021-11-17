@@ -7,7 +7,7 @@ On this machine, I can setup such a container by going through a process which I
 To automate this process, I wrote this Perl script `makecrypt.pl`.
 It works on my (old) machine, but I can't guarantee, it works on newer systems. It could be, that the required shell commands and options have changed in the meantime. Then the script won't work properly. As said, I have only tested it on OpenSuSE 13.1.
 
-`makecrypt.pl` uses system-calls to the commands described in [my article](https://hlubenow.lima-city.de/suse131.html#30). Maybe it would be a good idea to go through this article first and try to setup a data safe by hand first (checking if all necessary shell commands are available), before trying to do it by script.
+`makecrypt.pl` uses system-calls to the shell commands described in [my article](https://hlubenow.lima-city.de/suse131.html#30). Maybe it would be a good idea to go through this article first and try to setup a data safe by hand first (checking if all necessary shell commands are available), before trying to do it by script.
 
 The result of running `makecrypt.pl` should be:
 
