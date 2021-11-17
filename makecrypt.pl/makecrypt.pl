@@ -7,7 +7,7 @@ use Cwd;
 
 =begin comment
 
-    makecrypt.pl 1.0 - May create an encypted data container
+    makecrypt.pl 1.1 - May create an encypted data container
                        on certain Linux distributions.
                        Works for me on OpenSuSE Linux 13.1 (32bit).
 
@@ -30,36 +30,80 @@ use Cwd;
 
 =cut
 
-# Variable settings: These need to be edited by the user:
-
-my $CONTAINERFILE      = "/home/user/newcryptfile";
-my $SAFEDIRECTORY      = "/home/user/newsafe";
-my $CONTAINERSIZE      = 2;
-my $SIZETYPE           = "MB";
-my $PASSWORD           = "test";
-my $MOSAFILENAME       = "mosa_new";
-my $UMOSAFILENAME      = "umosa_new";
-
-
-# -----
-
-sub checkVariablesEdited {
-    my $var    = shift;
-    my $defval = shift;
-    my $vname  = shift;
-    if ($var eq $defval) {
-        print "Error: Variable '\$$vname' wasn't edited. Nothing done.\n";
-        print "\n(You're supposed to open the Perl script in an editor,\n";
-        print "and edit the variable settings at its top according to your needs.)\n\n";
-        exit 3;
+sub getOptions {
+    my @o = qw(containerfile safedirectory containersize sizetype password mosafilename umosafilename);
+    my @o2 = qw(cf sd cs st pw mf uf);
+    my %options;
+    my ($i, $u);
+    for $i (@o) {
+        $options{$i} = "";
     }
+    $options{mosafilename}  = "mosa_new";
+    $options{umosafilename} = "umosa_new";
+    $options{sizetype}      = "mb";
+    $options{nomosafiles}   = 0;
+    for $i (@ARGV) {
+        if ($i eq "-h" || $i eq "--help") {
+            printUsageMessage(1);
+            exit 0;
+        }
+        if ($i eq "--nomosafiles" || $i eq "-nm") {
+            $options{nomosafiles} = 1;
+        }
+    }
+    for $i (0 .. $#ARGV - 1) {
+        for $u (0 .. $#o) {
+            if ("--$o[$u]" eq $ARGV[$i] || "-$o2[$u]" eq $ARGV[$i]) {
+                $options{$o[$u]} = $ARGV[$i + 1];
+                last;
+            }
+        }
+    }
+    for $i (@o) {
+        if ($options{$i} eq "") {
+            print "Error: Option '--$i' not set.\n\n";
+            printUsageMessage(0);
+            exit 1;
+        }
+    }
+    if ($options{containersize} =~ /\D/) {
+        print "\nError: Containersize should be a number, not '$options{containersize}'.\n\n";
+        exit 1;
+    }
+    if ($options{containersize} < 1 || $options{containersize} > 999) {
+        print "Error: Containersize should be a number between 1 and 999. If you want more than 999 MB, use '--sizetype gb'.\n\n";
+        exit 1;
+    }
+    $options{sizetype} = lc($options{sizetype});
+    if ($options{sizetype} ne "mb" && $options{sizetype} ne "gb") {
+        print "Error: Invalid sizetype.\n\n";
+        exit 1;
+    }
+    $options{mosafilename}  = getcwd() . "/$options{mosafilename}";
+    $options{umosafilename} = getcwd() . "/$options{umosafilename}";
+    return %options;
+}
+
+sub printUsageMessage {
+    my $defs = shift;
+    print "Usage:\n\n";
+    print "makecrypt.pl --containerfile/-cf --safedirectory/-sd -containersize/-cs --password/-pw [--sizetype/-st] [--mosafilename/-mf] [--umosafilename/-uf] [--nomosafiles/-nm] [--help/-h]\n\n";
+    if ($defs) {
+        print "Defaults are:\n";
+        print "--sizetype:      mb\n";
+        print "--mosafilename:  mosa_new\n";
+        print "--umosafilename: umosa_new\n";
+        print "--nomosafiles:   Option not set.\n\n";
+    }
+    print "Example:\n\n";
+    print "makecrypt.pl --containerfile /home/user/newcryptfile --safedirectory /home/user/newsafe --containersize 2 --sizetype mb --password test\n\n"; 
 }
 
 sub checkFileExists {
     my $fname = shift;
     if (-e $fname) {
         print "'$fname' already exists. Nothing done.\n\n";
-        exit 4;
+        exit 1;
     }
 }
 
@@ -67,15 +111,24 @@ sub checkForYes {
     my $inp = <STDIN>;
     chomp($inp);
     print "\n";
-    if ($inp ne "y") {
-        print "Bye.\n\n";
-        exit 0;
+    if ($inp eq "y") {
+        return 1;
+    } else {
+        return 0;
     }
 }
 
 sub writefile {
     my $fname   = shift;
     my @content = @{ shift() };
+    my $inp;
+    if (-e $fname) {
+        print "File '$fname' already exists. Do you want to overwrite it (y/n)? ";
+        if (checkForYes() == 0) {
+            print "File '$fname' not written.\n";
+            return;
+        }
+    }
     open(my $fh, ">", $fname) or die $!;
     for my $i (@content) {
         print $fh "$i\n";
@@ -93,82 +146,62 @@ if ( $> != 0 ) {
     exit 1;
 }
 
-if ($SIZETYPE ne "MB" && $SIZETYPE ne "GB") {
-    print "Error: Invalid SIZETYPE.\n\n";
-    exit 2;
-}
+my %options = getOptions();
 
-checkVariablesEdited($CONTAINERFILE,
-                     "/home/user/newcryptfile",
-                     "CONTAINERFILE");
-
-checkVariablesEdited($SAFEDIRECTORY,
-                     "/home/user/newsafe",
-                     "SAFEDIRECTORY");
-
-checkFileExists($CONTAINERFILE);
-checkFileExists($SAFEDIRECTORY);
-
-$MOSAFILENAME  = getcwd() . "/$MOSAFILENAME";
-$UMOSAFILENAME = getcwd() . "/$UMOSAFILENAME";
+checkFileExists($options{containerfile});
+checkFileExists($options{safedirectory});
 
 print "Settings:\n\n";
-print "Container-file:\t$CONTAINERFILE\n";
-print "Safe directory:\t$SAFEDIRECTORY\n";
-print "Container size:\t$CONTAINERSIZE $SIZETYPE\n";
-print "Password:\t$PASSWORD\n";
-print "mosa filename:\t$MOSAFILENAME\n";
-print "umosa filename:\t$UMOSAFILENAME\n\n";
+print "Container-file:\t$options{containerfile}\n";
+print "Safe directory:\t$options{safedirectory}\n";
+print "Container size:\t$options{containersize} " . uc($options{sizetype}) . "\n";
+print "Password:\t$options{password}\n";
+if ($options{nomosafiles} == 0) {
+    print "mosa filename:\t$options{mosafilename}\n";
+    print "umosa filename:\t$options{umosafilename}\n";
+}
+print "\n";
 
 print "Proceed with these settings (y/n)? ";
-checkForYes();
-
-checkFileExists($MOSAFILENAME);
-checkFileExists($UMOSAFILENAME);
-
-my @commands = ("modprobe cryptoloop");
-push(@commands, "mkdir -p \"$SAFEDIRECTORY\"");
-
-$CONTAINERSIZE *= 1000;
-
-if ($SIZETYPE eq "GB") {
-    $CONTAINERSIZE *= 1000;
+if (checkForYes() == 0) {
+    print "Bye.\n\n";
+    exit 0;
 }
 
-push(@commands, "dd if=/dev/urandom of=\"$CONTAINERFILE\" bs=1024 count=$CONTAINERSIZE");
+my @commands = ("modprobe cryptoloop");
+push(@commands, "mkdir -p \"$options{safedirectory}\"");
 
-push(@commands, "losetup /dev/loop0 \"$CONTAINERFILE\"");
+$options{containersize} *= 1000;
+if ($options{sizetype} eq "gb") {
+    $options{containersize} *= 1000;
+}
 
-push(@commands, "echo -n \"$PASSWORD\" | cryptsetup --hash sha512 --cipher twofish-cbc-plain --key-size 256 create secret_img /dev/loop0 --key-file=-");
-
+push(@commands, "dd if=/dev/urandom of=\"$options{containerfile}\" bs=1024 count=$options{containersize}");
+push(@commands, "losetup /dev/loop0 \"$options{containerfile}\"");
+push(@commands, "echo -n \"$options{password}\" | cryptsetup --hash sha512 --cipher twofish-cbc-plain --key-size 256 create secret_img /dev/loop0 --key-file=-");
 push(@commands, "mke2fs -j /dev/mapper/secret_img");
-
-push(@commands, "mount /dev/mapper/secret_img \"$SAFEDIRECTORY\"");
-
+push(@commands, "mount /dev/mapper/secret_img \"$options{safedirectory}\"");
 my $i;
 for $i (@commands) {
     print "$i\n";
     system($i);
 }
 
-print "\nCreate mosa and umosa-files (y/n)? ";
-checkForYes();
-
-my @mosa = ("#!/bin/bash",
-            "",
-            "modprobe cryptoloop",
-            "losetup /dev/loop0 \"$CONTAINERFILE\"",
-            "cryptsetup --hash sha512 --cipher twofish-cbc-plain --key-size 256 create secret_img /dev/loop0", 
-            "mount /dev/mapper/secret_img \"$SAFEDIRECTORY\"");
-
-my @umosa = ("#!/bin/bash",
-             "",
-             "umount \"$SAFEDIRECTORY\"",
-             "cryptsetup close /dev/mapper/secret_img",
-             "losetup -d /dev/loop0");
-
-writefile($MOSAFILENAME,  \@mosa);
-writefile($UMOSAFILENAME, \@umosa);
+if ($options{nomosafiles} == 0) {
+    my @mosa = ("#!/bin/bash",
+                "",
+                "modprobe cryptoloop",
+                "losetup /dev/loop0 \"$options{containerfile}\"",
+                "cryptsetup --hash sha512 --cipher twofish-cbc-plain --key-size 256 create secret_img /dev/loop0", 
+                "mount /dev/mapper/secret_img \"$options{safedirectory}\"");
+    my @umosa = ("#!/bin/bash",
+                 "",
+                 "umount \"$options{safedirectory}\"",
+                 "cryptsetup close /dev/mapper/secret_img",
+                 "losetup -d /dev/loop0");
+    writefile($options{mosafilename},  \@mosa);
+    writefile($options{umosafilename}, \@umosa);
+}
 
 print "\nDone.\n\n";
 
@@ -180,9 +213,9 @@ print "\nDone.\n\n";
 
 # SuSE 8.1:
 # modprobe loop_fish2
-# dd if=/dev/urandom of=/home/user/cryptfile bs=1024 count=120000
+# dd if=/dev/urandom of=/home/def/cryptfile bs=1024 count=120000
 # mkdir /home/user/safe 
-# losetup -e twofish /dev/loop0 /home/user/cryptfile
+# losetup -e twofish /dev/loop0 /home/def/cryptfile
 # mke2fs /dev/loop0
 # mount -t ext2 /dev/loop0 /home/user/safe 
 # cat /home/user/system/sffile1 >> /etc/init.d/boot.local
@@ -192,10 +225,10 @@ print "\nDone.\n\n";
 # cat /home/user/system/sffile2 >> /etc/fstab
 # echo
 # echo "Added the following line to /etc/fstab:" 
-# echo "/home/user/cryptfile /home/user/safe ext2 loop,encryption=twofish,noauto,user 0 0"
+# echo "/home/def/cryptfile /home/user/safe ext2 loop,encryption=twofish,noauto,user 0 0"
 # echo
-# chown user.users /home/user/cryptfile
-# chown -R user.users /home/user/safe 
+# chown def.users /home/def/cryptfile
+# chown -R def.users /home/user/safe 
 # echo "Ready."
 
 # Mandrake Linux:
@@ -211,3 +244,4 @@ print "\nDone.\n\n";
 # modprobe twofish
 # modprobe cryptoloop
 # /etc/fstab (see above)
+

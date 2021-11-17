@@ -1,4 +1,4 @@
-#### makecrypt.pl 1.0 - May Create an Encrypted Data Container on OpenSuSE Linux 13.1
+#### makecrypt.pl 1.1 - May Create an Encrypted Data Container on OpenSuSE Linux 13.1
 
 On many Linux systems, it is possible to create a "data safe", that is a password secured, encrypted container file for sensible data.
 I'm still happy with my 32bit PC, that is considered old by now, which uses OpenSuSE 13.1.
@@ -11,7 +11,7 @@ It works on my (old) machine, but I can't guarantee, it works on newer systems. 
 
 The result of running `makecrypt.pl` should be:
 
-- an encrypted container file of a given size (several MB or even GB),
+- an encrypted container file of a given size (several megabytes or even gigabytes),
 - a directory, that can be mounted and umounted, in which the contents of the container file can be accessed,
 - the bash-scripts `mosa_new` and `umosa_new` in the script's directory.
 
@@ -19,29 +19,18 @@ The result of running `makecrypt.pl` should be:
 The scripts contain the shell commands, that are needed to mount, respectively umount the data safe (including the safe directory).
 When executing `mosa_new`, you are asked for the safe's password on the command-line. This password was determined during safe creation by the script `makecrypt.pl`.
 
-So the script `makecrypt.pl` needs some information:
+So the script `makecrypt.pl` needs some information, that has to be passed as options on the command-line:
 
-- What will the filename of the container file be?
-- Which directory will show the contents of the container file when mounted?
-- What size will the container file have? 
-- "MB" (megabytes) or "GB" (gigabytes)?
-- What is the password to be used to access the safe?
-- What shall the files for the `mosa` and `umosa` scripts be called?
+- What will the filename of the container file be? Option "--containerfile" or "-cf".
+- To which directory will the contents of the container file be mounted? Option "--safedirectory" or "-sd".
+- What size will the container file have? Option "--containersize" or "-cs". The value is a number between 1 and 999. If this number means megabytes or gigabytes depends on the "--sizetype"-option (default: megabytes).
+- What is the password to be used to access the safe? Option "--password" or "-pw".
 
-This information is given to the script by editing the variable section at its beginning. If you execute the script without having edited it before, it will exit with an error. 
-The variable section of the script looks like this (it shouldn't be too difficult to edit the variables according to your needs):
+Passing values for these options is required. Passing other values is optional, because default values are set for them:
 
-```
-# Variable settings: These need to be edited by the user:
-
-my $CONTAINERFILE      = "/home/user/newcryptfile";
-my $SAFEDIRECTORY      = "/home/user/newsafe";
-my $CONTAINERSIZE      = 2;
-my $SIZETYPE           = "MB";
-my $PASSWORD           = "test";
-my $MOSAFILENAME       = "mosa_new";
-my $UMOSAFILENAME      = "umosa_new";
-```
+- "mb" (megabytes) or "gb" (gigabytes) for "--containersize"? Option "--sizetype" or "-st". Default: "mb".
+- What shall the files for the `mosa` and `umosa` scripts be called? Options "--mosafilename" or "-mf", and "--umosafilename" or "-uf". Default values: "mosa_new" and "umosa_new".
+- If you don't want to write the `mosa` and `umosa` scripts, use the option "--nomosafiles" or "-nm".
 
 Writing a container file of 1 GB or more may take a while. So sometimes patience is required.
 
