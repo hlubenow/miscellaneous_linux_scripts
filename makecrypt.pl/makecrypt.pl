@@ -99,6 +99,19 @@ sub printUsageMessage {
     print "makecrypt.pl --containerfile /home/user/newcryptfile --safedirectory /home/user/newsafe --containersize 2 --sizetype mb --password test\n\n"; 
 }
 
+sub checkShellCommands {
+    my @shcommands = qw(modprobe mkdir dd losetup cryptsetup mke2fs mount);
+    my $i;
+    my @t;
+    for $i (@shcommands) {
+        @t = `which $i 2>/dev/null`;
+        if ($#t < 0) {
+            print "Error: Required shell-command '$i' not found. Further installation needed. Nothing done.\n\n";
+            exit 1;
+        }
+    }
+}
+
 sub checkFileExists {
     my $fname = shift;
     if (-e $fname) {
@@ -145,6 +158,8 @@ if ( $> != 0 ) {
     print "Error: This script must be run as user 'root'.\n\n"; 
     exit 1;
 }
+
+checkShellCommands();
 
 my %options = getOptions();
 
