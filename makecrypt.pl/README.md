@@ -32,6 +32,12 @@ Passing values for these options is required. Passing other values is optional, 
 - What shall the files for the `mosa` and `umosa` scripts be called? Options "--mosafilename" or "-mf", and "--umosafilename" or "-uf". Default values: "mosa_new" and "umosa_new".
 - If you don't want to write the `mosa` and `umosa` scripts, use the option "--nomosafiles" or "-nm".
 
+Here's an example, how the script can be called (as root) (for a container of just 2 megabytes):
+
+```
+makecrypt.pl --containerfile /home/user/newcryptfile --safedirectory /home/user/newsafe --containersize 2 --sizetype mb --password test
+```
+
 Writing a container file of 1 GB or more may take a while. So sometimes patience is required.
 
 When the script is finished, the safe's directory should be accessible, and there should be (only) a subdirectory called `lost+found` inside it. So right after creation the safe is open (!). You then can write other content into the directory. When you're done, leave the directory and run `umosa_new` to close it (closing the directory won't work, while you're still in it). After the directory was closed, the container file still holds the contents, but they cannot be accessed until the directory is mounted again by running `mosa_new`. But to successfully run `mosa_new`, the safe's password is required. That's how using the safe works.
