@@ -49,6 +49,6 @@ When the script is finished, the safe's directory should be accessible, and ther
 
 So, the script `makecrypt.pl` is only run once to create the data safe. To open and close the safe afterwards, the scripts `mosa_new` and `umosa_new` are used.
 
-The scripts `mosa_new` and `umosa_new` can also be renamed lateron if needed. It doesn't really matter, how they're called.
+The scripts `mosa_new` and `umosa_new` can also be renamed lateron if needed. It doesn't really matter, what they're called.
 
 License of `makecrypt.pl` : GNU GPL, version 3 (or above). 
