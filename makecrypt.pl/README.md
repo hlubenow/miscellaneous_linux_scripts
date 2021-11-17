@@ -23,7 +23,7 @@ So the script `makecrypt.pl` needs some information, that has to be passed as op
 
 - What will the filename of the container file be? Option "--containerfile" or "-cf".
 - To which directory will the contents of the container file be mounted? Option "--safedirectory" or "-sd".
-- What size will the container file have? Option "--containersize" or "-cs". The value is a number between 1 and 999. If this number means megabytes or gigabytes depends on the "--sizetype"-option (default: megabytes).
+- What size will the container file have? Option "--containersize" or "-cs". The value is a number between 1 and 999. The meaning of this number (megabytes or gigabytes) depends on the "--sizetype"-option (default: megabytes).
 - What is the password to be used to access the safe? Option "--password" or "-pw".
 
 Passing values for these options is required. Passing other values is optional, because default values are set for them:
