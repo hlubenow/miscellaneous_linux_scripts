@@ -5,11 +5,11 @@ I'm still happy with my 32bit PC, that is considered old by now, which uses Open
 On this machine, I can setup such a container by going through a process which I have described [here](https://hlubenow.lima-city.de/suse131.html#30).
 
 To automate this process, I wrote this Perl script `makecrypt.pl`.
-It works on my (old) machine, but I can't guarantee, it works on newer systems. It could be, that the required shell commands and options have changed in the meantime. Then the script won't work properly. As said, I have only tested it with OpenSuSE 13.1.
+It works on my (old) machine, but I can't guarantee, it works on newer systems. It could be, that the required shell commands and options have changed in the meantime. Then the script won't work properly. As said, I have only tested it on OpenSuSE 13.1.
 
-`makecrypt.pl` uses system-calls to the commands described in [my article](https://hlubenow.lima-city.de/suse131.html#30). Maybe it would be a good idea to go through this article first and try to setup a data safe by hand first, checking if all necessary shell-commands are available, before trying to do it by script.
+`makecrypt.pl` uses system-calls to the commands described in [my article](https://hlubenow.lima-city.de/suse131.html#30). Maybe it would be a good idea to go through this article first and try to setup a data safe by hand first (checking if all necessary shell commands are available), before trying to do it by script.
 
-A result of `makecrypt.pl` be:
+The result of running `makecrypt.pl` should be:
 
 - an encrypted container file of a given size (several MB or even GB),
 - a directory, that can be mounted and umounted, in which the contents of the container file can be accessed,
