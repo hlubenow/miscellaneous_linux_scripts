@@ -14,6 +14,6 @@ I often just use "m *", for example.
 mplayer (movies), mpg321 (mp3s), xmp (tracker-mods) and so on.
 If you want other programs, you'd have to edit the script.
 
-To check out certain files, "m" sometimes calls the Linux "file" command.
+To check out certain files, "m" sometimes calls the Linux `file` command.
 
 License: GNU GPL 3 (or above)
