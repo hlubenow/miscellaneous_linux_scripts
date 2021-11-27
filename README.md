@@ -9,5 +9,6 @@ Here is a bunch of smaller scripts, typically used on the Linux console.
 - mehrwertsteuer.pl: A little script to calculate the German "Mehrwertsteuer".
 - dreisatz.pl: A simple script to calculate "rule of three" ("Dreisatz" in German).
 - makecrypt.pl: May create an encrypted data container on OpenSuSE Linux 13.1
+- stopwatch.pl: A simple stopwatch just for minutes and seconds (uses Perl/Tk).
 
 License: GNU GPL 3 (or above) (except "shufflemp3.pl", which has the same license as Perl itself, which should be compatible with the GNU GPL too though).
