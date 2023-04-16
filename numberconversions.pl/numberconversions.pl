@@ -3,9 +3,11 @@
 use warnings;
 use strict;
 
+use Term::ReadLine;
+
 =begin comment
 
-    numberconversions.pl 1.2 - Conversions between decimal, hexadecimal
+    numberconversions.pl 1.3 - Conversions between decimal, hexadecimal
     and binary numbers.
 
     Copyright (C) 2023 hlubenow
@@ -78,7 +80,6 @@ package NumberConverter {
     }
 }
 
-
 sub askBinDec {
     my $num = shift;
     print "\nIs the number '$num' decimal or binary (d/b) [b]? ";
@@ -132,6 +133,13 @@ sub printHelp {
     print "- 'q': Quit.\n\n";
 }
 
+# Main:
+
+# Setting up the "Term::ReadLine"-module to get an editable input line,
+# and even an "input-history"-function (by pressing arrow-keys up and down).
+my $term = Term::ReadLine->new("numberconversions.pl");
+# Switching off default underline of prompt:
+$term->ornaments(0);
 
 my $nc = NumberConverter->new(); 
 
@@ -146,14 +154,10 @@ my $firstloop = 1;
 my $t;
 my $answer;
 
-my $sep = "\t\t";
-
 while (1) {
     $t = "";
     if ($firstloop == 0 || $num eq "") {
-        print "Enter a number ('h' for help): ";
-        $num = <STDIN>;
-        chomp($num);
+        $num = $term->readline("Enter a number ('h' for help): ");
     }
     if ($num eq "h") {
         printHelp();
@@ -192,9 +196,7 @@ while (1) {
         $oldbinnum = $nc->dec2bin($num);
     }
     if ($t eq "") {
-        print "Is '$num' decimal or binary (d/b) [b]? ";
-        $answer = <STDIN>;
-        chomp($answer);
+        $answer = $term->readline("Is '$num' decimal or binary (d/b) [b]? ");
         if ($answer eq "d") {
             $t = "d";
             $oldbinnum = $nc->dec2bin($num);
