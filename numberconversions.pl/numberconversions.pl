@@ -5,7 +5,7 @@ use strict;
 
 =begin comment
 
-    numberconversions.pl 1.0 - Conversions between decimal, hexadecimal
+    numberconversions.pl 1.1 - Conversions between decimal, hexadecimal
     and binary numbers.
 
     Copyright (C) 2023 hlubenow
@@ -43,7 +43,7 @@ package NumberConverter {
 
     sub dec2bin {
         my ($self, $num) = @_;
-        return sprintf("%b", $num);
+        return sprintf("%016b", $num);
     }
 
     sub cutHexPrefix {
@@ -95,6 +95,21 @@ sub printT {
     print $a . (" " x $t) . "$b\n";
 }
 
+sub checkNumber {
+    my ($num, $t, $nc) = @_;
+    if ($t eq "h") {
+        $num = $nc->hex2dec($num);
+    }
+    if ($t eq "b") {
+        $num = $nc->bin2dec($num);
+    }
+    if ($num <= 65535) {
+        return "ok";
+    } else {
+        return "error";
+    }
+}
+
 my $nc = NumberConverter->new(); 
 
 my $num = "";
@@ -121,7 +136,7 @@ while (1) {
         print "\nBye.\n\n";
         last;
     }
-    if ($num =~ /^0[xX]/) {
+    if ($num =~ /^(0x|0X)/) {
         $t = "h";
         $num = substr($num, 2);
     }
@@ -131,7 +146,7 @@ while (1) {
             next;
         }
     }
-    if ($num =~ /[2-9]/) {
+    if ($t ne "h" && $num =~ /[2-9]/) {
         $t = "d";
     }
     if ($t eq "") {
@@ -143,6 +158,11 @@ while (1) {
         } else {
             $t = "b";
         }
+    }
+
+    if (checkNumber($num, $t, $nc) eq "error") {
+        print "\nError: Number '$num' out of range (limit: 65535, 0xffff, 16 bit).\n\n";
+        next;
     }
 
     print "\n";
