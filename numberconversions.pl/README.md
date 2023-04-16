@@ -1,4 +1,4 @@
-#### numberconversions.pl 1.1
+#### numberconversions.pl 1.2
 
 Simple conversions between decimal, hexadecimal and binary numbers (probably mostly interesting for software developers).
 
