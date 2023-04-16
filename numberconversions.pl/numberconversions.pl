@@ -5,7 +5,7 @@ use strict;
 
 =begin comment
 
-    numberconversions.pl 1.1 - Conversions between decimal, hexadecimal
+    numberconversions.pl 1.2 - Conversions between decimal, hexadecimal
     and binary numbers.
 
     Copyright (C) 2023 hlubenow
@@ -43,7 +43,9 @@ package NumberConverter {
 
     sub dec2bin {
         my ($self, $num) = @_;
-        return sprintf("%016b", $num);
+        # "sprintf("%016b", $num)" would create leading zeros to 16 bit,
+        # but it gets in the way, when reversing the binary number: 
+        return sprintf("%b", $num);
     }
 
     sub cutHexPrefix {
@@ -110,9 +112,31 @@ sub checkNumber {
     }
 }
 
+sub getReverseBinNum {
+    my $oldbinnum = shift;
+    my $binnum    = "";
+    my $i;
+    my $n;
+    my $oldbinnumlen = length($oldbinnum);
+    for $i (0 .. $oldbinnumlen - 1) {
+        $n = substr($oldbinnum, $i, 1);
+        $binnum .= 1 - $n;
+    }
+    return $binnum;
+}
+
+sub printHelp {
+    print "\nnumberconversions.pl\n\n";
+    print "- Hex-numbers have to be entered with a leading '0x'.\n";
+    print "- 'r': Use a reversed version of the previousely entered binary number.\n";
+    print "- 'q': Quit.\n\n";
+}
+
+
 my $nc = NumberConverter->new(); 
 
 my $num = "";
+my $oldbinnum = "";
 
 if ($#ARGV > -1) {
     $num = $ARGV[0];
@@ -127,9 +151,25 @@ my $sep = "\t\t";
 while (1) {
     $t = "";
     if ($firstloop == 0 || $num eq "") {
-        print "Enter a number. Start hex-numbers with '0x'. 'q' to quit: ";
+        print "Enter a number ('h' for help): ";
         $num = <STDIN>;
         chomp($num);
+    }
+    if ($num eq "h") {
+        printHelp();
+        $num = "";
+        next;
+    }
+    if ($num eq "r") {
+        if ($oldbinnum) {
+            $num = getReverseBinNum($oldbinnum);
+            $oldbinnum = $num;
+            $t   = "b";
+        } else {
+            print "\nError: Reversing a binary number not possible at the moment.\n\n";
+            $num = "";
+            next;
+        }
     }
     $firstloop = 0;
     if ($num eq "q") {
@@ -139,6 +179,7 @@ while (1) {
     if ($num =~ /^(0x|0X)/) {
         $t = "h";
         $num = substr($num, 2);
+        $oldbinnum = $nc->hex2bin($num);
     }
     if ($num =~ /[^0-9]/) {
         if ($t ne "h" || $num =~ /[^0-9A-Fa-f]/) {
@@ -148,6 +189,7 @@ while (1) {
     }
     if ($t ne "h" && $num =~ /[2-9]/) {
         $t = "d";
+        $oldbinnum = $nc->dec2bin($num);
     }
     if ($t eq "") {
         print "Is '$num' decimal or binary (d/b) [b]? ";
@@ -155,8 +197,10 @@ while (1) {
         chomp($answer);
         if ($answer eq "d") {
             $t = "d";
+            $oldbinnum = $nc->dec2bin($num);
         } else {
             $t = "b";
+            $oldbinnum = $num;
         }
     }
 
