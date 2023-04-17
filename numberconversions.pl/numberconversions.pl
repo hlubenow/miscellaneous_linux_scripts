@@ -30,55 +30,50 @@ use Term::ReadLine;
 
 my $RIGHTALIGNEMENT = 32;
 
-package NumberConverter {
+# -------- The conversion functions: -------- 
 
-    sub new {
-        my $classname = shift;
-        my $self = {};
-        return bless($self, $classname);
-    }
-
-    sub dec2hex {
-        my ($self, $num) = @_;
-        return sprintf("%x", $num);
-    }
-
-    sub dec2bin {
-        my ($self, $num) = @_;
-        # "sprintf("%016b", $num)" would create leading zeros to 16 bit,
-        # but it gets in the way, when reversing the binary number: 
-        return sprintf("%b", $num);
-    }
-
-    sub cutHexPrefix {
-        my ($self, $num) = @_;
-        if ($num =~ /^0[xX]/) {
-            $num = substr($num, 2);
-        }
-        return $num;
-    }
-
-    sub hex2dec {
-        my ($self, $num) = @_;
-        $num = $self->cutHexPrefix($num);
-        return hex($num);
-    }
-
-    sub hex2bin {
-        my ($self, $num) = @_;
-        return $self->dec2bin($self->hex2dec($num));
-    }
-
-    sub bin2dec {
-        my ($self, $num) = @_;
-        return oct("0b".$num);
-    }
-
-    sub bin2hex {
-        my ($self, $num) = @_;
-        return $self->dec2hex($self->bin2dec($num));
-    }
+sub dec2hex {
+    my $num = shift;
+    return sprintf("%x", $num);
 }
+
+sub dec2bin {
+    my $num = shift;
+    # "sprintf("%016b", $num)" would create leading zeros to 16 bit,
+    # but it gets in the way, when reversing the binary number: 
+    return sprintf("%b", $num);
+}
+
+sub cutHexPrefix {
+    my $num = shift;
+    if ($num =~ /^(0x|0X)/) {
+        $num = substr($num, 2);
+    }
+    return $num;
+}
+
+sub hex2dec {
+    my $num = shift;
+    $num = cutHexPrefix($num);
+    return hex($num);
+}
+
+sub hex2bin {
+    my $num = shift;
+    return dec2bin(hex2dec($num));
+}
+
+sub bin2dec {
+    my $num = shift;
+    return oct("0b".$num);
+}
+
+sub bin2hex {
+    my $num = shift;
+    return dec2hex(bin2dec($num));
+}
+
+# -------- Other functions: -------- 
 
 sub askBinDec {
     my $num = shift;
@@ -101,10 +96,10 @@ sub printT {
 sub checkNumber {
     my ($num, $t, $nc) = @_;
     if ($t eq "h") {
-        $num = $nc->hex2dec($num);
+        $num = hex2dec($num);
     }
     if ($t eq "b") {
-        $num = $nc->bin2dec($num);
+        $num = bin2dec($num);
     }
     if ($num <= 65535) {
         return "ok";
@@ -133,15 +128,13 @@ sub printHelp {
     print "- 'q': Quit.\n\n";
 }
 
-# Main:
+# -------- Main: -------- 
 
 # Setting up the "Term::ReadLine"-module to get an editable input line,
 # and even an "input-history"-function (by pressing arrow-keys up and down).
 my $term = Term::ReadLine->new("numberconversions.pl");
 # Switching off default underline of prompt:
 $term->ornaments(0);
-
-my $nc = NumberConverter->new(); 
 
 my $num = "";
 my $oldbinnum = "";
@@ -183,7 +176,7 @@ while (1) {
     if ($num =~ /^(0x|0X)/) {
         $t = "h";
         $num = substr($num, 2);
-        $oldbinnum = $nc->hex2bin($num);
+        $oldbinnum = hex2bin($num);
     }
     if ($num =~ /[^0-9]/) {
         if ($t ne "h" || $num =~ /[^0-9A-Fa-f]/) {
@@ -193,20 +186,20 @@ while (1) {
     }
     if ($t ne "h" && $num =~ /[2-9]/) {
         $t = "d";
-        $oldbinnum = $nc->dec2bin($num);
+        $oldbinnum = dec2bin($num);
     }
     if ($t eq "") {
         $answer = $term->readline("Is '$num' decimal or binary (d/b) [b]? ");
         if ($answer eq "d") {
             $t = "d";
-            $oldbinnum = $nc->dec2bin($num);
+            $oldbinnum = dec2bin($num);
         } else {
             $t = "b";
             $oldbinnum = $num;
         }
     }
 
-    if (checkNumber($num, $t, $nc) eq "error") {
+    if (checkNumber($num, $t) eq "error") {
         print "\nError: Number '$num' out of range (limit: 65535, 0xffff, 16 bit).\n\n";
         next;
     }
@@ -214,20 +207,20 @@ while (1) {
     print "\n";
     if ($t eq "d") {
         printT("Decimal:", $num);
-        printT("Hexadecimal:", "0x" . $nc->dec2hex($num));
-        printT("Binary:", $nc->dec2bin($num));
+        printT("Hexadecimal:", "0x" . dec2hex($num));
+        printT("Binary:", dec2bin($num));
     }
 
     if ($t eq "h") {
         printT("Hexadecimal:", "0x" . $num);
-        printT("Decimal:", $nc->hex2dec($num));
-        printT("Binary:", $nc->hex2bin($num));
+        printT("Decimal:", hex2dec($num));
+        printT("Binary:", hex2bin($num));
     }
 
     if ($t eq "b") {
         printT("Binary:", $num);
-        printT("Decimal:", $nc->bin2dec($num));
-        printT("Hexadecimal:", "0x" . $nc->bin2hex($num));
+        printT("Decimal:", bin2dec($num));
+        printT("Hexadecimal:", "0x" . bin2hex($num));
     }
     print "\n";
 }
