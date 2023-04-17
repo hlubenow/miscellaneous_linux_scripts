@@ -75,18 +75,6 @@ sub bin2hex {
 
 # -------- Other functions: -------- 
 
-sub askBinDec {
-    my $num = shift;
-    print "\nIs the number '$num' decimal or binary (d/b) [b]? ";
-    my $answer = <STDIN>;
-    chomp($answer);
-    if ($answer eq "d") {
-        return "d";
-    } else {
-        return "b"
-    }
-}
-
 sub printT {
     my ($a, $b) = @_;
     my $t = $RIGHTALIGNEMENT - length($a) - length($b);
