@@ -7,14 +7,13 @@ use Cwd;
 
 =begin comment
 
-    makecrypt.pl 1.1 - May create an encypted data container
-                       on certain Linux distributions.
-                       Works for me on OpenSuSE Linux 13.1 (32bit).
+    makecrypt.pl 1.2 - May create an encypted data container
+                       on certain Linux distributions (OpenSuSE Leap 15.5, Leap 15.4, OpenSuSE Linux 13.1 (32bit)).                    .
 
-    Copyright (C) 2021 hlubenow
+    Copyright (C) 2021, 2024 hlubenow
 
     This program is free software: you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
+    it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
@@ -183,7 +182,9 @@ if (checkForYes() == 0) {
     exit 0;
 }
 
-my @commands = ("modprobe cryptoloop");
+# Since Leap 15.5 not needed any more:
+# my @commands = ("modprobe cryptoloop");
+my @commands = ();
 push(@commands, "mkdir -p \"$options{safedirectory}\"");
 
 $options{containersize} *= 1000;
@@ -205,7 +206,8 @@ for $i (@commands) {
 if ($options{nomosafiles} == 0) {
     my @mosa = ("#!/bin/bash",
                 "",
-                "modprobe cryptoloop",
+                "# Since Leap 15.5 not needed any more:",
+                "# modprobe cryptoloop",
                 "losetup /dev/loop0 \"$options{containerfile}\"",
                 "cryptsetup --hash sha512 --cipher twofish-cbc-plain --key-size 256 create secret_img /dev/loop0", 
                 "mount /dev/mapper/secret_img \"$options{safedirectory}\"");
@@ -225,6 +227,9 @@ print "\nDone.\n\n";
 =cut
 
 # Deprecated shell-commands for even older Linux distributions:
+
+# OpenSuSE Leap 15.4 and below may need this line at the beginning of "mosa_new":
+# modprobe cryptoloop
 
 # SuSE 8.1:
 # modprobe loop_fish2
@@ -259,4 +264,3 @@ print "\nDone.\n\n";
 # modprobe twofish
 # modprobe cryptoloop
 # /etc/fstab (see above)
-
