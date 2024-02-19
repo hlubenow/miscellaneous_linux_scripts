@@ -1,4 +1,4 @@
-#### makecrypt.pl 1.1 - May Create an Encrypted Data Container on OpenSuSE Leap 15.4 (and on OpenSuSE 13.1)
+#### makecrypt.pl 1.2 - May Create an Encrypted Data Container on OpenSuSE Leap 15.5, Leap 15.4 (and on OpenSuSE 13.1)
 
 On many Linux systems, it is possible to create a "data safe", that is a password secured, encrypted container file for sensible data.
 
@@ -44,5 +44,7 @@ When the script is finished, the safe's directory should be accessible, and ther
 So, the script `makecrypt.pl` is only run once to create the data safe. To open and close the safe afterwards, the scripts `mosa_new` and `umosa_new` are used.
 
 The scripts `mosa_new` and `umosa_new` can also be renamed lateron if needed. It doesn't really matter, what they're called.
+
+Version 1.2: Since OpenSuSE Leap 15.5, the kernel module `cryptoloop` is no longer supported. The command `lsmod | grep crypto` shows, that a module called `cryptd` is active instead. Anyway, on this distribution the script just works without the line `modprobe cryptoloop`. So I commented it out.
 
 License of `makecrypt.pl` : GNU GPL, version 3 (or above). 
