@@ -208,6 +208,7 @@ if ($options{nomosafiles} == 0) {
                 "",
                 "# Since Leap 15.5 not needed any more:",
                 "# modprobe cryptoloop",
+                "",
                 "losetup /dev/loop0 \"$options{containerfile}\"",
                 "cryptsetup --hash sha512 --cipher twofish-cbc-plain --key-size 256 create secret_img /dev/loop0", 
                 "mount /dev/mapper/secret_img \"$options{safedirectory}\"");
