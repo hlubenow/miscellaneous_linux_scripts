@@ -7,8 +7,14 @@ use Cwd;
 
 =begin comment
 
-    makecrypt.pl 1.2 - May create an encypted data container
-                       on certain Linux distributions (OpenSuSE Leap 15.5, Leap 15.4, OpenSuSE Linux 13.1 (32bit)).                    .
+    makecrypt.pl 1.2 - May create an encypted data container on certain
+                       Linux distributions, like:
+
+                       - OpenSuSE Leap 15.5,
+                       - OpenSuSE Leap 15.4,
+                       - OpenSuSE Linux 13.1 (32bit)).
+                       
+                       (In the older distributions, activate the line "modprobe cryptoloop".)
 
     Copyright (C) 2021, 2024 hlubenow
 
