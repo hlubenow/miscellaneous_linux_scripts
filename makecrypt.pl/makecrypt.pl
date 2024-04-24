@@ -189,7 +189,7 @@ if (checkForYes() == 0) {
 }
 
 # Since Leap 15.5 not needed any more:
-# my @commands = ("modprobe cryptoloop");
+# my @commands = ("modprobe crypto");
 my @commands = ();
 push(@commands, "mkdir -p \"$options{safedirectory}\"");
 
