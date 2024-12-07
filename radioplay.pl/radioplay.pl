@@ -2,16 +2,16 @@
 
 my @RADIOS = (
 
-["Fresh80s" , "https://www.fresh80s.de/listen.m3u"],
+["Fresh80s" , "http://s37.derstream.net/128.mp3"],
 ["NDR N-Joy", "http://www.ndr.de/resources/metadaten/audio/m3u/n-joy.m3u"],
 
 );
 
 =begin comment
 
-    radioplay.pl 1.0 - Lets you select an internet radio station to play
+    radioplay.pl 1.1 - Lets you select an internet radio station to play
 
-    Copyright (C) 2021 hlubenow
+    Copyright (C) 2021, 2024 hlubenow
 
     This program is free software: you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
@@ -87,3 +87,4 @@ my $execstr = "mplayer '$mp3stream' -quiet -nojoystick -af volnorm";
 $execstr .= " &>/dev/null";
 system($execstr);
 print "\n";
+
