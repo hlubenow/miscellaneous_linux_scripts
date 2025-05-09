@@ -2,7 +2,7 @@
 
 =begin comment
 
-    dreisatz.pl 1.0 - Caculates "rule of three"
+    dreisatz.pl 1.0 - Calculates "rule of three"
 
     Copyright (C) 2021 hlubenow
 
