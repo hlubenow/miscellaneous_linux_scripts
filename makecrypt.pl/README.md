@@ -1,4 +1,4 @@
-#### makecrypt.pl 1.2 - May Create an Encrypted Data Container on OpenSuSE Leap 15.5, Leap 15.4 (and on OpenSuSE 13.1)
+#### makecrypt.pl 1.2 - May Create an Encrypted Data Container on OpenSuSE Leap 15.6, 15.5, 15.4 (and on OpenSuSE 13.1)
 
 On many Linux systems, it is possible to create a "data safe", that is a password secured, encrypted container file for sensible data.
 
