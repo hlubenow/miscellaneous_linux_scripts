@@ -1,7 +1,7 @@
 
 ### m - Play multimedia-file(s)
 
-2026-02: News: Updated the old version of 2021 to version 1.2 of 2024.
+2026-02: News: Updated the old version of 2021 to version 1.3, mainly of 2024.
 It's possible to just run `m` now (without asterisk), and it tries to play everything it finds in the current working directory.
 Passing a number to it, makes it try to play that and the following files: That is, if `14` is passed, and it finds at least `14.mp4`, it tries to play `14.mp4`, `15.mp4` and so on.
 
