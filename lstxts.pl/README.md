@@ -1,6 +1,6 @@
-#### lsdir.pl
+#### lstxts.pl
 
-This script lists just the directories inside the current directory.
+This script lists the text files, it finds inside the current directory.
 
 It's only a few bytes long, but still useful (at least to me).
 
