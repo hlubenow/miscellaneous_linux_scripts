@@ -2,9 +2,11 @@
 
 =begin comment
 
-    m - Play multimedia-file(s)
+    m - Play multimedia-file(s), version 1.2
 
-    Copyright (C) 2021 hlubenow
+        Including "playfrom", when started with "m 7", for example.
+
+    Copyright (C) 2021, 2023, 2024 hlubenow
 
     This program is free software: you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
@@ -25,80 +27,161 @@
 
 use warnings;
 use strict;
-use Cwd;
 
-my $dir = getcwd();
+package FilePlayer {
 
-sub play {
-    print "Playing '$_[1]'.\n";
-    system("$_[0] \"$_[1]\"");
-}
+    use Cwd;
 
-if ($#ARGV < 0) {
-    print "\nNope.\n\n";
-    exit 1;
-}
+    sub new {
+        my $classname = shift;
+        my $self = {};
+        $self->{dir}   = getcwd();
+        $self->{mpl}   = "mplayer -af volnorm -really-quiet";
+        $self->{mplfs} = "mplayer -fs -af volnorm -really-quiet";
+        $self->{m321}  = "mpg123 -q";
+        $self->{xmp}   = "xmp";
+        $self->{sufs}  = {"flv"      => $self->{mplfs},
+                          "flv.part" => $self->{mplfs},
+                          "webm"     => $self->{mplfs},
+                          "mp3"      => $self->{m321},
+                          "mod"      => $self->{xmp},
+                          "s3m"      => $self->{xmp},
+                          "it"       => $self->{xmp},
+                          "ogg"      => "ogg123"};
 
-my $mpl   = "mplayer -af volnorm -really-quiet";
-my $mplfs = "mplayer -fs -af volnorm -really-quiet";
-my $m321  = "mpg123 -q";
-my $xmp   = "xmp";
+        $self->{checks} = {"WAVE"    => "aplay -q",
+                           "MP3"     => $self->{m321},
+                           "layer"   => $self->{m321},
+                           "AVI"     => $self->{mplfs},
+                           "Matroska" => $self->{mplfs},
+                           "Microsoft ASF"         => $self->{mplfs},
+                           "Apple QuickTime movie" => $self->{mplfs},
+                           "MP4"                   => $self->{mplfs},
+                           "tracker" => "xmp",
+                           "SID"     => "sidplayfp",
+                           "MIDI"    => "timidity 1>/dev/null"};
 
-my %sufs = ("flv"      => $mplfs,
-            "flv.part" => $mplfs,
-            "webm"     => $mplfs,
-            "mp3"      => $m321,
-            "mod"      => $xmp,
-            "s3m"      => $xmp,
-            "it"       => $xmp,
-            "ogg"      => "ogg123");
-
-
-my %checks = ("WAVE"    => "aplay -q",
-              "MP3"     => $m321, 
-              "layer"   => $m321,
-              "AVI"     => $mplfs,
-              "Matroska"              => $mplfs,
-              "Microsoft ASF"         => $mplfs,
-              "Apple QuickTime movie" => $mplfs,
-              "tracker" => "xmp",
-              "SID"     => "sidplayfp",
-              "MIDI"    => "timidity 1>/dev/null");
-
-foreach my $i (@ARGV) {
-    if (! -f $i) {
-        print "'$i' not suitable (not existent or directory).\n";
-        next;
+        return bless($self, $classname);
     }
-    my $nextfile = 0;
-    foreach my $u (keys(%sufs)) {
-        if ($i =~ /\Q$u\E$/) {
-            if ($sufs{$u} eq $xmp) {
-                print "\nPlayer is $xmp.\n\n";
+
+    sub getFileList {
+        my $self = shift;
+        my @fl;
+        if ($#ARGV < 0) {
+            @fl = <*>;
+        } elsif ($#ARGV == 0 && $ARGV[0] !~ /\D/) {
+            $self->getFileListPlayFrom();
+            return;
+        } else {
+            @fl = @ARGV;
+        }
+        $self->{filelist} = \@fl;
+    }
+
+    sub getFileListPlayFrom {
+        my $self = shift;
+        if ($#ARGV < 0) {
+            print "Usage: playfrom.pl [number]\n";
+            exit(1);
+        }
+        my $compare = $ARGV[0];
+        if ($compare =~ /\D/) {
+            print "Error: Option to 'playfrom.pl' has to be a number.\n";
+            exit(2);
+        }
+        my @fl = <*>;
+        my @result = ();
+        my %nums   = ();
+        my @numskeys;
+        my @b;
+        my ($d, $dlen, $c, $i, $u, $num);
+        for $i (@fl) {
+            $num = "";
+            @b = split(/\./, $i);
+            $d = $b[0];
+            $dlen = length($d) - 1;
+            for $u (0 .. $dlen) {
+                $c = substr($d, $u, 1);
+                if ($c =~ /\D/) {
+                    last;
+                } else {
+                    $num .= $c;
+                }
             }
-            &play($sufs{$u}, $i);
-            $nextfile = 1;
-            last;
+            if ($num ne "" && $num >= $compare) {
+                $nums{$num} = $i;
+            }
+        }
+        @numskeys = sort {$a <=> $b} keys(%nums);
+        for $i (@numskeys) {
+            push(@result, $nums{$i});
+        }
+        $self->{filelist} = \@result;
+    }
+
+    sub getCommand {
+        my $self = shift;
+        my $fname = shift;
+        my %sufs  = %{ $self->{sufs} };
+        my @sufkeys = keys(%sufs);
+        my %checks = %{ $self->{checks} };
+        my @checkskeys = keys(%checks);
+        my ($i, $fstr);
+        foreach $i (@sufkeys) {
+            if ($fname =~ /\.\Q$i\E$/) {
+                return $sufs{$i};
+            }
+        }
+        $fstr = `file "$fname"`;
+        for $i (@checkskeys) {
+            if ($fstr =~ /\Q$i\E/) {
+                return $checks{$i};
+            }
+        }
+        # Special cases:
+        if($fstr =~ /MPEG/) {
+            return $self->{mplfs};
+        }
+        if($fstr =~ /data/ && $fname =~ /sid$/) {
+            return "sidplay2";
+        }
+        return "";
+    }
+
+    sub playFiles {
+        my $self = shift;
+        $self->getFileList();
+        # $self->getFileListPlayFrom();
+        my @flist = @{ $self->{filelist} };
+        my $i;
+        my $command = "";
+        foreach $i (@flist) {
+            if (! -f $i) {
+                print "'$i' not suitable (not existent or directory).\n";
+                next;
+            }
+            $command = $self->getCommand($i);
+            if ($command eq "") {
+                print "Format of '$i' not recognized.\n";
+                next;
+            }
+            if ($command eq $self->{xmp}) {
+                print "\nPlayer is $self->{xmp}.\n\n";
+            }
+            $self->playFile($command, $i);
         }
     }
-    if ($nextfile) { next; }
-    my $fstr = `file "$i"`;
-    foreach my $u (keys(%checks)) {
-        if ($fstr =~ /\Q$u\E/) {
-            &play($checks{$u}, $i);
-            $nextfile = 1;
-            last;
-        }
+
+    sub playFile {
+        my $self = shift; 
+        my $command = shift;
+        my $fname = shift;
+        my $e;
+        $e = "$command \"$fname\"";
+        print "Playing '$fname'.\n";
+        system($e);
     }
-    if ($nextfile) { next; }
-    # Special cases:
-    if($fstr =~ /MPEG/) {
-        &play($mplfs, $i);
-        next;
-    }
-    if($fstr =~ /data/ && $i =~ /sid$/) {
-        &play("sidplay2", $i);
-        next;
-    }
-    print "Format of '$i' not recognized.\n";
 }
+
+my $fp = FilePlayer->new();
+$fp->playFiles();
