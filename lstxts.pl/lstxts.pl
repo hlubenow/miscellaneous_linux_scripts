@@ -2,7 +2,7 @@
 
 =begin comment
 
-    lstxts.pl - Lists the text-files in a directory.
+    lstxts.pl - Lists the text-files, it finds in a directory.
 
     Copyright (C) 2026 hlubenow
 
