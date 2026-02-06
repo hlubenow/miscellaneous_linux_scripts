@@ -14,6 +14,6 @@ Here is a bunch of smaller scripts, typically used on the Linux console.
 - numberconversions.pl: Converts between decimal, hexadecimal and binary numbers.
 - startlxterminal.pl: Makes sure, that lxterminal gets the focus when opened.
 - lsdir.pl: Lists the directories in a directory.
-- lstxts.pl - Lists the text-files in a directory.
+- lstxts.pl - Lists the text-files, it finds in a directory.
   
 License: GNU GPL 3 (or above) (except "shufflemp3.pl", which has the same license as Perl itself, which should be compatible with the GNU GPL too though).
