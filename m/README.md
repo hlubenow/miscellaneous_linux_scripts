@@ -3,7 +3,7 @@
 
 2026-02: News: Updated the old version of 2021 to version 1.2 of 2024.
 It's possible to just run `m` now (without asterisk), and it tries to play everything it finds in the current working directory.
-Passing a number to it, making it try to play that and the following files: That is, if you pass `14`, and it finds at least `14.mp4`, it tries to play `14.mp4`, `15.mp4` and so on.
+Passing a number to it, makes it try to play that and the following files: That is, if `14` is passed, and it finds at least `14.mp4`, it tries to play `14.mp4`, `15.mp4` and so on.
 
 `m` is a little Perl-script I use, to play media files of different types on the Linux console.
 
